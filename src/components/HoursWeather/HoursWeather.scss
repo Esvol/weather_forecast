@@ -1,0 +1,44 @@
+
+
+.main-weather-hours-info{
+    position: relative;
+    width: 70%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: flex-start;
+
+    &::after{
+        top: 10px;
+        left: -8px;
+        position: absolute;
+        content: '';
+        width: 1px;
+        height: 78%;
+        background-color: rgb(0, 0, 0, 0.3);
+    }
+
+    .hours-info{
+        margin-top: 10px;
+        margin-left: 10px;
+        width: 23%;
+        height: 38%;   
+        border: 1px solid rgb(0, 0, 0, 0.3);
+        border-radius: 20%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-size: 17px;
+        font-weight: 700;
+        color: rgb(40, 29, 96);
+        background-color: rgba(144, 144, 10, 0.2);
+
+        .hours-weather-image-info{
+            width: 100px;
+            height: 100px;
+        }
+    }
+}
