@@ -5,7 +5,8 @@ import { useState } from 'react'
 
 const Weather = ({weatherData, city, inputError}) => {
     const [mainDayIndex, setMainDayIndex] = useState(0)
-    
+    const [detailSwitch, setDetailSwitch] = useState(false)
+
     const FindNameOfDate = (data, weather_date) => {
         weather_date = new Date(data.date);
         let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Sunday"];
@@ -59,7 +60,13 @@ const Weather = ({weatherData, city, inputError}) => {
                     } 
                 </div>
 
-                <HoursWeather weatherData={weatherData} mainDayIndex={mainDayIndex} setImageFunction={setImageFunction}/>
+                <HoursWeather 
+                weatherData={weatherData} 
+                mainDayIndex={mainDayIndex} 
+                inputError={inputError} 
+                setImageFunction={setImageFunction} 
+                detailSwitch={detailSwitch} 
+                setDetailSwitch={setDetailSwitch}/>
 
             </div>
             <div className='other-weather-container'>
@@ -70,7 +77,7 @@ const Weather = ({weatherData, city, inputError}) => {
                 setImageFunction={setImageFunction} 
                 setDayFunction={setDayFunction}
                 FindNameOfDate = {FindNameOfDate}
-                setMainDayIndex={setMainDayIndex}/>
+                setDetailSwitch={setDetailSwitch}/>
             </div>
         </div>
     );
