@@ -1,85 +1,54 @@
-import './Weather.scss'
-import HoursWeather from './HoursWeather/HourseWeather'
+import '../style/Weather.scss'
+
+import { useState, useEffect } from 'react'
+
+import HoursWeather from './HoursWeather/HoursWeather'
+import MainWeather from './MainWeather/MainWeather'
 import OtherWeather from './OtherWeather/OtherWeather'
-import { useState } from 'react'
+import Skeleton from './MainWeather/Skeleton'
 
-const Weather = ({weatherData, city, inputError}) => {
-    const [mainDayIndex, setMainDayIndex] = useState(0)
-    const [detailSwitch, setDetailSwitch] = useState(false)
+import axios from 'axios'
 
-    const FindNameOfDate = (data, weather_date) => {
-        weather_date = new Date(data.date);
-        let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Sunday"];
-        weather_date = days[weather_date.getDate()%7]
-        return weather_date;
-    }
+import { useDispatch, useSelector } from 'react-redux'
+import { setData } from '../redux/slices/weatherSlice'
 
-    const setDayFunction = (key) => {
-        let indexOfDay;
-        weatherData.map((data, index) => {
-            if (Number(data.date_epoch) === Number(key)) 
-            {
-                indexOfDay = index
+const Weather = () => {
+
+    const dispatch = useDispatch();
+
+    const city = useSelector((state) => state.weather.city);
+
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const res = await axios.get(
+                    `http://api.weatherapi.com/v1/forecast.json?key=ec975cc1300e4978aae83444230607&q=${city}&days=3&aqi=no&alerts=no`
+                );
+                dispatch(setData(res.data));
+                setLoading(false);
+            } catch (error) {
+                setLoading(true);
             }
-            return null 
-        })
-        setMainDayIndex(indexOfDay)
-    }
+        }
 
-    const setImageFunction = (text, weather) => {
-        if (text === 'Cloudy' || text === 'Mist') weather = 'image/sky+sun.webp'
-        else if (text === 'Sunny') weather = 'image/sun.png'
-        else if (text === 'Partly cloudy' || text === 'Light rain shower') weather = 'image/sky+rain+sun.webp'
-        else if (text === 'Overcast' || text === 'Moderate rain' || text === 'Patchy rain possible') weather = 'image/rain.png'
-        else weather = 'image/sky+sun.webp'
+        fetchData();
+    }, [city]);
 
-        return weather;
-    }
+    if (loading) return (
+        <>
+            <h1> Can`t find info about weather in this city!</h1>
+            <Skeleton />
+        </>
+    );
 
     return (
-        <div className='container'>
-            <div className='main-weather'>
-                <div className='main-weather-info'>
-                    {
-                        inputError === true ? 
-                        <>
-                            <div className='weather-image'></div>
-                            <div className='dayValue'>Write city correctly</div>
-                            <div className='cityValue'></div>
-                            <div className='temperatureValue'></div>
-                            <div className='weatherValue'></div>
-                        </>
-                        : 
-                        <>
-                            <img alt='weather_image' src={setImageFunction(weatherData[mainDayIndex].day.condition.text, '')} className='weather-image'/>
-                            <div className='dayValue'>Today, {FindNameOfDate(weatherData[mainDayIndex], '')}</div>
-                            <div className='cityValue'>{city}</div>
-                            <div className='temperatureValue'>Average temp: {Math.round(weatherData[mainDayIndex].day.avgtemp_c)} °C</div>
-                            <div className='weatherValue'>{weatherData[mainDayIndex].day.condition.text}</div>
-                        </>
-                    } 
-                </div>
-
-                <HoursWeather 
-                weatherData={weatherData} 
-                mainDayIndex={mainDayIndex} 
-                inputError={inputError} 
-                setImageFunction={setImageFunction} 
-                detailSwitch={detailSwitch} 
-                setDetailSwitch={setDetailSwitch}/>
-
-            </div>
-            <div className='other-weather-container'>
-                <OtherWeather 
-                weatherData={weatherData}
-                mainDayIndex = {mainDayIndex} 
-                inputError={inputError} 
-                setImageFunction={setImageFunction} 
-                setDayFunction={setDayFunction}
-                FindNameOfDate = {FindNameOfDate}
-                setDetailSwitch={setDetailSwitch}/>
-            </div>
-        </div>
+        <>
+            <MainWeather />
+            <HoursWeather />
+            <OtherWeather />
+        </>
     );
 }
 

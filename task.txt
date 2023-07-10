@@ -1,7 +1,8 @@
-Дизайн https://hackr.io/blog/react-projects
-Использовать API https://www.weatherapi.com/api-explorer.aspx#forecast
+Дизайн: https://hackr.io/blog/react-projects
+
+Использовать API:
+https://www.weatherapi.com/api-explorer.aspx#forecast
+Key: ec975cc1300e4978aae83444230607
 
 На следующий раз:
-- Исправить дизайн деталей
-
-(Возможно сделать возможным переключать дни, тыкая на иконки с погодой, или выгружать ленту из 7 дней).
+- Добавить роут по возможности *необязательно.
